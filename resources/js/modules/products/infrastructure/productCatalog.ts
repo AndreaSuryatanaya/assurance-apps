@@ -1,0 +1,128 @@
+import type { Product } from '../domain/product';
+
+export const productCatalog: Product[] = [
+    {
+        slug: 'motor-vehicle',
+        name: 'Motor Vehicle Insurance',
+        shortDescription: 'Protect your car with cover options built around your needs.',
+        description: 'Explore vehicle protection options and submit an application with your vehicle details.',
+        icon: 'car',
+        details: ['Choose a coverage option', 'Share basic vehicle information', 'Review before submitting'],
+        insuredItemFields: [
+            { name: 'vehicleMake', label: 'Vehicle make', placeholder: 'e.g. Toyota', type: 'text', required: true },
+            { name: 'vehicleModel', label: 'Vehicle model', placeholder: 'e.g. Corolla Cross', type: 'text', required: true },
+            { name: 'vehicleYear', label: 'Year', placeholder: 'e.g. 2023', type: 'number', required: true },
+            { name: 'registrationNumber', label: 'Vehicle registration number', placeholder: 'Enter registration number', type: 'text', required: true },
+            { name: 'vehicleUse', label: 'Vehicle use', type: 'select', required: true, options: ['Personal', 'Business'] },
+            { name: 'vehicleValue', label: 'Estimated vehicle value', placeholder: 'Enter amount', type: 'number' },
+            { name: 'riskLocation', label: 'Primary vehicle location', placeholder: 'City or area', type: 'text', required: true },
+        ],
+    },
+    {
+        slug: 'engineering',
+        name: 'Engineering Insurance',
+        shortDescription: 'Submit project or equipment details for an engineering cover review.',
+        description: 'Tell us about the project or equipment you would like to protect.',
+        icon: 'building',
+        details: ['Describe the project or equipment', 'Add the project location and dates', 'Review your application'],
+        insuredItemFields: [
+            { name: 'projectType', label: 'Project or equipment type', placeholder: 'Describe the project or equipment', type: 'text', required: true },
+            { name: 'projectValue', label: 'Estimated project or equipment value', placeholder: 'Enter amount', type: 'number' },
+            { name: 'projectLocation', label: 'Project location', placeholder: 'City or site address', type: 'text', required: true },
+            { name: 'projectStartDate', label: 'Project start date', type: 'date', required: true },
+            { name: 'projectEndDate', label: 'Project end date', type: 'date' },
+        ],
+    },
+    {
+        slug: 'marine',
+        name: 'Marine Insurance',
+        shortDescription: 'Share shipment or vessel details to start a marine application.',
+        description: 'Provide the shipment or vessel information for the protection you are requesting.',
+        icon: 'ship',
+        details: ['Describe the shipment or vessel', 'Add origin, destination, and timing', 'Submit for a simulated review'],
+        insuredItemFields: [
+            { name: 'cargoOrVessel', label: 'Cargo or vessel description', placeholder: 'What would you like to insure?', type: 'text', required: true },
+            { name: 'shipmentValue', label: 'Estimated value', placeholder: 'Enter amount', type: 'number' },
+            { name: 'origin', label: 'Origin', placeholder: 'Origin location', type: 'text', required: true },
+            { name: 'destination', label: 'Destination', placeholder: 'Destination location', type: 'text', required: true },
+            { name: 'shipmentDate', label: 'Planned shipment date', type: 'date', required: true },
+        ],
+    },
+    {
+        slug: 'neon-sign',
+        name: 'Neon Sign',
+        shortDescription: 'Tell us about the sign, its location, and its installation.',
+        description: 'Start an application for a neon sign by sharing its basic details.',
+        icon: 'spark',
+        details: ['Describe the sign and its size', 'Provide the installation location', 'Add an estimated replacement value'],
+        insuredItemFields: [
+            { name: 'signType', label: 'Sign type', placeholder: 'Describe the sign', type: 'text', required: true },
+            { name: 'signDimensions', label: 'Sign dimensions', placeholder: 'e.g. 2 m × 1 m', type: 'text' },
+            { name: 'signLocation', label: 'Installation location', placeholder: 'Address or area', type: 'text', required: true },
+            { name: 'installationDate', label: 'Installation date', type: 'date' },
+            { name: 'replacementValue', label: 'Estimated replacement value', placeholder: 'Enter amount', type: 'number' },
+        ],
+    },
+    {
+        slug: 'mobile-phone',
+        name: 'Mobile Phone',
+        shortDescription: 'Provide your device details and purchase information.',
+        description: 'Begin a mobile phone application with the device information and proof of purchase.',
+        icon: 'phone',
+        details: ['Add the brand, model, and IMEI', 'Tell us when the phone was purchased', 'Attach a simulated proof of purchase'],
+        insuredItemFields: [
+            { name: 'phoneBrand', label: 'Phone brand', placeholder: 'e.g. Apple', type: 'text', required: true },
+            { name: 'phoneModel', label: 'Phone model', placeholder: 'e.g. iPhone 16', type: 'text', required: true },
+            { name: 'imei', label: 'IMEI', placeholder: 'Enter IMEI number', type: 'text', required: true },
+            { name: 'purchaseDate', label: 'Purchase date', type: 'date', required: true },
+            { name: 'purchasePrice', label: 'Purchase price', placeholder: 'Enter amount', type: 'number' },
+        ],
+    },
+    {
+        slug: 'liability',
+        name: 'Liability Insurance',
+        shortDescription: 'Describe your activity and the protection you would like to request.',
+        description: 'Share details about the activity or business connected to your liability application.',
+        icon: 'shield',
+        details: ['Describe your activity', 'Add the main operating location', 'Tell us what protection you are requesting'],
+        insuredItemFields: [
+            { name: 'businessActivity', label: 'Business or activity', placeholder: 'Describe your activity', type: 'text', required: true },
+            { name: 'operatingLocation', label: 'Operating location', placeholder: 'City or address', type: 'text', required: true },
+            { name: 'annualRevenue', label: 'Estimated annual revenue', placeholder: 'Enter amount (optional)', type: 'number' },
+            { name: 'requestedLimit', label: 'Requested protection limit', placeholder: 'Enter amount (optional)', type: 'number' },
+        ],
+    },
+    {
+        slug: 'property',
+        name: 'Property Insurance',
+        shortDescription: 'Share details about the property and the value you want to protect.',
+        description: 'Provide basic property and occupancy details for your application.',
+        icon: 'home',
+        details: ['Describe the property and its use', 'Provide its location', 'Add an estimated property value'],
+        insuredItemFields: [
+            { name: 'propertyType', label: 'Property type', type: 'select', required: true, options: ['House', 'Apartment', 'Office', 'Shop', 'Other'] },
+            { name: 'propertyAddress', label: 'Property address', placeholder: 'Street, city, and postal code', type: 'text', required: true },
+            { name: 'propertyUse', label: 'Property use', type: 'select', required: true, options: ['Residential', 'Commercial', 'Mixed use'] },
+            { name: 'constructionType', label: 'Construction type', placeholder: 'Describe the main construction materials', type: 'text' },
+            { name: 'propertyValue', label: 'Estimated property value', placeholder: 'Enter amount', type: 'number' },
+        ],
+    },
+    {
+        slug: 'business-interruption',
+        name: 'Business Interruption',
+        shortDescription: 'Share your business details and the interruption cover period requested.',
+        description: 'Tell us about your business and the interruption protection you would like to request.',
+        icon: 'chart',
+        details: ['Describe your business', 'Add your business location', 'Tell us the requested protection period'],
+        insuredItemFields: [
+            { name: 'businessType', label: 'Business type', placeholder: 'Describe your business', type: 'text', required: true },
+            { name: 'businessLocation', label: 'Business location', placeholder: 'City or address', type: 'text', required: true },
+            { name: 'estimatedRevenue', label: 'Estimated annual revenue', placeholder: 'Enter amount (optional)', type: 'number' },
+            { name: 'indemnityPeriod', label: 'Requested interruption period', placeholder: 'e.g. 3 months', type: 'text', required: true },
+        ],
+    },
+];
+
+export function findProductBySlug(slug: string): Product | undefined {
+    return productCatalog.find((product) => product.slug === slug);
+}

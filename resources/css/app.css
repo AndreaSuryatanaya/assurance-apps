@@ -1,0 +1,81 @@
+@import 'tailwindcss';
+
+@source '../views';
+@source '../js';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@theme {
+    --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+    --color-brand-navy: #0b2456;
+    --color-brand-blue: #087de1;
+    --color-brand-cyan: #12c7e9;
+    --color-brand-blue-soft: #e8f7fc;
+    --color-surface: #ffffff;
+    --color-surface-muted: #f6f9fc;
+    --color-text-primary: #172b4d;
+    --color-text-secondary: #64748b;
+    --color-border: #e2e8f0;
+    --color-success: #168a62;
+    --color-warning: #b7791f;
+    --color-danger: #c2414b;
+    --radius-card: 16px;
+    --radius-feature: 24px;
+    --shadow-card: 0 6px 24px rgb(15 35 70 / 6%);
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-white font-sans text-text-primary antialiased;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+        font: inherit;
+    }
+
+    ::selection {
+        @apply bg-brand-blue/15 text-brand-navy;
+    }
+}
+
+@layer components {
+    .page-container {
+        @apply mx-auto w-full max-w-[1200px] px-5 sm:px-8;
+    }
+
+    .button-primary {
+        @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-brand-blue px-6 py-3 text-sm font-semibold text-white transition duration-200 hover:bg-brand-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue;
+    }
+
+    .button-secondary {
+        @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-brand-navy transition duration-200 hover:border-blue-200 hover:bg-brand-blue-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue;
+    }
+
+    .form-control {
+        @apply min-h-12 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/10;
+    }
+
+    .eyebrow {
+        @apply inline-flex items-center gap-2 rounded-full border border-blue-100 bg-brand-blue-soft px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-brand-blue;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
