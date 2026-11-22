@@ -4,6 +4,7 @@ import type { Product } from '../../../products/domain/product';
 import { motorCoverageOptions } from '../../../products/domain/product';
 import type { InsuranceApplicationDraft } from '../../domain/insuranceApplication';
 import type { FieldErrors } from '../../domain/applicationRules';
+import { formatThousands } from '../../../../shared/lib/numberFormatting';
 import StepIndicator from './StepIndicator';
 
 type ApplicationWizardProps = {
@@ -64,7 +65,7 @@ export default function ApplicationWizard(props: ApplicationWizardProps) {
             <div className="grid gap-5 sm:grid-cols-2">
                 {product.insuredItemFields.map((field) => (
                     <div key={field.name} className={field.type === 'textarea' ? 'sm:col-span-2' : ''}>
-                        <FormField name={field.name} label={field.label} type={field.type} value={draft.insuredItem[field.name] ?? ''} onChange={(value) => onInsuredItemChange(field.name, value)} error={errors[field.name]} required={field.required} placeholder={field.placeholder} options={field.options} />
+                        <FormField name={field.name} label={field.label} type={field.type} value={draft.insuredItem[field.name] ?? ''} onChange={(value) => onInsuredItemChange(field.name, value)} error={errors[field.name]} required={field.required} placeholder={field.placeholder} options={field.options} formatThousands={field.type === 'number' && field.name !== 'vehicleYear'} />
                     </div>
                 ))}
             </div>
@@ -93,7 +94,7 @@ export default function ApplicationWizard(props: ApplicationWizardProps) {
                 <div className="grid gap-5 sm:grid-cols-2">
                     <FormField name="startDate" label="Requested start date" type="date" value={draft.coverage.startDate} onChange={(value) => onCoverageChange('startDate', value)} error={errors.startDate} required />
                     <FormField name="endDate" label="Requested end date" type="date" value={draft.coverage.endDate} onChange={(value) => onCoverageChange('endDate', value)} error={errors.endDate} required />
-                    <FormField name="requestedAmount" label="Requested sum insured (optional)" type="number" value={draft.coverage.requestedAmount} onChange={(value) => onCoverageChange('requestedAmount', value)} placeholder="Enter amount" />
+                    <FormField name="requestedAmount" label="Requested sum insured (optional)" type="number" value={draft.coverage.requestedAmount} onChange={(value) => onCoverageChange('requestedAmount', value)} placeholder="Enter amount" formatThousands />
                     {product.slug === 'motor-vehicle' && <div className="sm:col-span-2"><FormField name="coverageNotes" label="Additional notes (optional)" type="textarea" value={draft.coverage.coverageNotes} onChange={(value) => onCoverageChange('coverageNotes', value)} placeholder="Anything else you would like us to know?" rows={3} /></div>}
                 </div>
             </div>
@@ -120,11 +121,16 @@ export default function ApplicationWizard(props: ApplicationWizardProps) {
                         <ReviewValue label="Name" value={draft.applicant.fullName} /><ReviewValue label="Email" value={draft.applicant.email} /><ReviewValue label="Phone" value={draft.applicant.phone} /><ReviewValue label="Address" value={draft.applicant.address} />
                     </ReviewSection>
                     <ReviewSection title="Insured item" stepIndex={1} onEdit={onEditStep}>
-                        {product.insuredItemFields.map((field) => <ReviewValue key={field.name} label={field.label} value={draft.insuredItem[field.name]} />)}
+                        {product.insuredItemFields.map((field) => {
+                            const value = draft.insuredItem[field.name];
+                            const shouldFormat = field.type === 'number' && field.name !== 'vehicleYear';
+
+                            return <ReviewValue key={field.name} label={field.label} value={value && shouldFormat ? formatThousands(value) : value} />;
+                        })}
                     </ReviewSection>
                     <ReviewSection title="Coverage request" stepIndex={2} onEdit={onEditStep}>
                         {draft.coverage.coverageOption && <ReviewValue label="Option" value={draft.coverage.coverageOption} />}
-                        <ReviewValue label="Start date" value={draft.coverage.startDate} /><ReviewValue label="End date" value={draft.coverage.endDate} /><ReviewValue label="Requested sum insured" value={draft.coverage.requestedAmount} /><ReviewValue label="Notes" value={draft.coverage.coverageNotes} />
+                        <ReviewValue label="Start date" value={draft.coverage.startDate} /><ReviewValue label="End date" value={draft.coverage.endDate} /><ReviewValue label="Requested sum insured" value={draft.coverage.requestedAmount ? formatThousands(draft.coverage.requestedAmount) : ''} /><ReviewValue label="Notes" value={draft.coverage.coverageNotes} />
                     </ReviewSection>
                     <ReviewSection title="Documents" stepIndex={3} onEdit={onEditStep}>
                         {draft.documentNames.length ? draft.documentNames.map((name) => <ReviewValue key={name} label="File" value={name} />) : <p>No documents selected.</p>}
