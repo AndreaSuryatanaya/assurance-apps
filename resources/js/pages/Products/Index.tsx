@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import AppLayout from '../../layouts/AppLayout';
 import ProductCard from '../../modules/products/presentation/components/ProductCard';
 import { productCatalog } from '../../modules/products/infrastructure/productCatalog';
@@ -33,6 +33,34 @@ export default function ProductsIndex() {
                     <div className="absolute -bottom-5 -right-3 hidden rounded-2xl border border-blue-50 bg-white px-5 py-4 shadow-card sm:block">
                         <p className="text-xs text-slate-500">Simple application</p>
                         <p className="mt-1 font-semibold text-brand-navy">One step at a time</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="about" className="scroll-mt-24 border-y border-slate-100 bg-surface-muted py-16 sm:py-20">
+                <div className="page-container grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-stretch">
+                    <div className="flex flex-col justify-center">
+                        <span className="eyebrow">About Haltev</span>
+                        <h2 className="mt-4 text-3xl font-bold tracking-tight text-brand-navy sm:text-4xl">Insurance should feel easier to understand.</h2>
+                        <p className="mt-5 max-w-xl leading-7 text-slate-600">Haltev Insurrance is built around a simple idea: people make more confident choices when protection is explained clearly. We make it easier to explore coverage and take the next step at your own pace.</p>
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                        <article className="rounded-feature border border-blue-100 bg-white p-6 shadow-card sm:p-7">
+                            <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-blue-soft text-lg font-bold text-brand-blue" aria-hidden="true">◎</span>
+                            <p className="mt-5 text-sm font-semibold text-brand-blue">Our vision</p>
+                            <h3 className="mt-2 text-xl font-bold leading-7 text-brand-navy">A future where everyone can choose protection with confidence.</h3>
+                            <p className="mt-3 text-sm leading-6 text-slate-500">We want insurance to feel more approachable, with clear information that helps people understand their options.</p>
+                        </article>
+                        <article className="rounded-feature bg-brand-navy p-6 text-white shadow-card sm:p-7">
+                            <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-lg font-bold text-brand-cyan" aria-hidden="true">✓</span>
+                            <p className="mt-5 text-sm font-semibold text-brand-cyan">Our mission</p>
+                            <h3 className="mt-2 text-xl font-bold leading-7">Make every step feel clear and guided.</h3>
+                            <ul className="mt-4 space-y-3 text-sm leading-6 text-blue-100">
+                                <li className="flex gap-2"><span className="text-brand-cyan">✓</span><span>Explain coverage choices in straightforward language.</span></li>
+                                <li className="flex gap-2"><span className="text-brand-cyan">✓</span><span>Guide applicants through a simple, thoughtful process.</span></li>
+                                <li className="flex gap-2"><span className="text-brand-cyan">✓</span><span>Keep the next step visible at every stage.</span></li>
+                            </ul>
+                        </article>
                     </div>
                 </div>
             </section>
@@ -73,16 +101,6 @@ export default function ProductsIndex() {
                 </div>
             </section>
 
-            <section id="about" className="page-container scroll-mt-24 pb-16 sm:pb-20">
-                <div className="flex flex-col gap-5 rounded-feature bg-brand-blue-soft p-7 sm:flex-row sm:items-center sm:justify-between sm:p-10">
-                    <div className="max-w-2xl">
-                        <p className="text-sm font-semibold text-brand-blue">Here to make things clearer</p>
-                        <h2 className="mt-2 text-2xl font-bold tracking-tight text-brand-navy sm:text-3xl">Start with the cover that fits your needs.</h2>
-                        <p className="mt-3 text-sm leading-6 text-slate-600">Browse our product categories and follow the guided application at your own pace.</p>
-                    </div>
-                    <Link href="/#products" className="button-primary shrink-0">Browse products <span aria-hidden="true">→</span></Link>
-                </div>
-            </section>
         </AppLayout>
     );
 }
