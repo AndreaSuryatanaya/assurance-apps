@@ -2,6 +2,7 @@ import { Link, router, usePage } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { signOutOfDemoAccount } from '../modules/auth/application/demoSessionStore';
+import { ToastContainer } from 'react-toastify';
 
 type AdminLayoutProps = {
     children: ReactNode;
@@ -96,6 +97,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 </header>
                 <main className="mx-auto w-full max-w-[1440px] px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">{children}</main>
             </div>
+            <ToastContainer position="top-right" autoClose={4000} closeOnClick={false} pauseOnHover newestOnTop theme="light" />
         </div>
     );
 }

@@ -10,6 +10,8 @@ import { useUsers } from '../../modules/auth/presentation/hooks/useUsers';
 import { useRoleGuard } from '../../modules/auth/presentation/hooks/useRoleGuard';
 import { useApplicationHistory } from '../../modules/application/presentation/hooks/useApplicationHistory';
 import AdminDialog from './components/AdminDialog';
+import { toast } from 'react-toastify';
+import { showConfirmToast } from '../../shared/lib/toastNotifications';
 
 type SubmissionFormValues = {
     accountId: string;
@@ -153,6 +155,7 @@ export default function AdminSubmissions() {
             accuracyConfirmed: formValues.accuracyConfirmed,
         };
 
+        const wasEditing = Boolean(editingReference);
         if (editingReference) {
             updateApplicationInHistory(editingReference, {
                 accountId: selectedUser.id,
@@ -180,24 +183,38 @@ export default function AdminSubmissions() {
         }
         setIsFormOpen(false);
         setEditingReference(null);
+        toast.success(wasEditing ? 'Submission updated.' : 'Submission created.');
     }
 
     function handleDelete(application: ApplicationHistoryRecord) {
-        if (window.confirm(`Delete submission ${application.referenceNumber}? This action only affects this demo session.`)) {
-            deleteApplicationFromHistory(application.referenceNumber);
-        }
+        showConfirmToast({
+            title: `Delete ${application.referenceNumber}?`,
+            description: 'This submission will be removed from the current demo session only.',
+            confirmLabel: 'Delete submission',
+            onConfirm: () => {
+                deleteApplicationFromHistory(application.referenceNumber);
+                toast.success('Submission deleted.');
+            },
+        });
     }
 
     function approveSubmission(application: ApplicationHistoryRecord) {
-        if (!window.confirm(`Mark ${application.referenceNumber} as approved in this demo? This does not issue an insurance policy.`)) return;
-
-        updateApplicationInHistory(application.referenceNumber, {
-            accountId: application.accountId,
-            applicantName: application.applicantName,
-            productSlug: application.productSlug,
-            productName: application.productName,
-            status: 'approved',
-            details: application.details,
+        showConfirmToast({
+            title: `Approve ${application.referenceNumber}?`,
+            description: 'This updates the demo status only and does not issue an insurance policy.',
+            confirmLabel: 'Approve',
+            tone: 'success',
+            onConfirm: () => {
+                updateApplicationInHistory(application.referenceNumber, {
+                    accountId: application.accountId,
+                    applicantName: application.applicantName,
+                    productSlug: application.productSlug,
+                    productName: application.productName,
+                    status: 'approved',
+                    details: application.details,
+                });
+                toast.success('Submission marked as approved.');
+            },
         });
     }
 

@@ -1,4 +1,5 @@
 import { createInertiaApp } from '@inertiajs/react';
+import 'react-toastify/dist/ReactToastify.css';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Haltev Insurrance';
 

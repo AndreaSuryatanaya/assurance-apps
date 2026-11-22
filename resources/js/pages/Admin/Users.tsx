@@ -6,6 +6,8 @@ import { createUser, deleteUser, updateUser } from '../../modules/auth/infrastru
 import { useUsers } from '../../modules/auth/presentation/hooks/useUsers';
 import { useRoleGuard } from '../../modules/auth/presentation/hooks/useRoleGuard';
 import AdminDialog from './components/AdminDialog';
+import { toast } from 'react-toastify';
+import { showConfirmToast } from '../../shared/lib/toastNotifications';
 
 type UserFormValues = Omit<DemoUserRecord, 'id'>;
 
@@ -55,6 +57,7 @@ export default function AdminUsers() {
         }
 
         const normalizedValues = { ...formValues, name: formValues.name.trim(), email: normalizedEmail };
+        const wasEditing = Boolean(editingUserId);
         if (editingUserId) {
             updateUser(editingUserId, normalizedValues);
         } else {
@@ -63,11 +66,19 @@ export default function AdminUsers() {
         }
         setEditingUserId(null);
         setIsFormOpen(false);
+        toast.success(wasEditing ? 'User details updated.' : 'User added successfully.');
     }
 
     function handleDelete(user: DemoUserRecord) {
-        const confirmed = window.confirm(`Delete ${user.name}? Associated submission records will remain, and this account will no longer be available for demo sign-in.`);
-        if (confirmed) deleteUser(user.id);
+        showConfirmToast({
+            title: `Delete ${user.name}?`,
+            description: 'Associated submission records will remain. This user will be removed from the demo directory.',
+            confirmLabel: 'Delete user',
+            onConfirm: () => {
+                deleteUser(user.id);
+                toast.success('User deleted.');
+            },
+        });
     }
 
     return (
