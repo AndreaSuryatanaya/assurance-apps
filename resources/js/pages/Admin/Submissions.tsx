@@ -34,7 +34,7 @@ const emptyForm: SubmissionFormValues = {
     productSlug: productCatalog[0].slug, status: 'submitted', coverageOption: '', startDate: '', endDate: '',
     requestedAmount: '', coverageNotes: '', insuredItem: {}, documentNames: '', accuracyConfirmed: false,
 };
-const statusLabels: Record<ApplicationStatus, string> = { submitted: 'Submitted', under_review: 'Under review', needs_information: 'Needs information', approved: 'Approved (demo)' };
+const statusLabels: Record<ApplicationStatus, string> = { submitted: 'Submitted', under_review: 'Under review', needs_information: 'Needs information', approved: 'Approved' };
 
 function formatDate(value: string): string {
     return new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).format(new Date(value));
@@ -42,6 +42,21 @@ function formatDate(value: string): string {
 
 function formatFieldName(value: string): string {
     return value.replace(/([A-Z])/g, ' $1').replace(/^./, (character) => character.toUpperCase());
+}
+
+function SubmissionStatusBadge({ status }: { status: ApplicationStatus }) {
+    const statusClassName = status === 'approved'
+        ? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+        : status === 'submitted'
+            ? 'bg-blue-50 text-blue-700 ring-blue-200'
+            : 'bg-amber-50 text-amber-700 ring-amber-200';
+
+    return (
+        <span className={`inline-flex w-fit items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold ring-1 ring-inset ${statusClassName}`}>
+            {status === 'approved' && <svg viewBox="0 0 20 20" fill="none" className="h-3.5 w-3.5" aria-hidden="true"><path d="m4 10 4 4 8-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+            {statusLabels[status]}
+        </span>
+    );
 }
 
 export default function AdminSubmissions() {
@@ -205,18 +220,19 @@ export default function AdminSubmissions() {
                     <div className="mt-5 rounded-2xl border border-dashed border-slate-200 bg-white p-10 text-center"><p className="font-semibold text-brand-navy">No matching submissions</p><p className="mt-2 text-sm text-slate-500">Try another search term.</p></div>
                 ) : (
                     <div className="mt-5 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-card">
-                        <div className="overflow-x-auto"><table className="w-full min-w-[1080px] text-left text-sm">
-                            <thead className="bg-white text-xs uppercase tracking-wide text-slate-500"><tr><th className="px-5 py-4 font-semibold">Applicant</th><th className="px-5 py-4 font-semibold">Account email</th><th className="px-5 py-4 font-semibold">Product</th><th className="px-5 py-4 font-semibold">Reference</th><th className="px-5 py-4 font-semibold">Submitted</th><th className="px-5 py-4 font-semibold">Status</th><th className="px-5 py-4 text-right font-semibold">Actions</th></tr></thead>
+                        <div className="overflow-x-auto"><table className="w-full min-w-[1520px] table-fixed text-left text-sm">
+                            <colgroup><col className="w-[13%]" /><col className="w-[18%]" /><col className="w-[15%]" /><col className="w-[14%]" /><col className="w-[10%]" /><col className="w-[12%]" /><col className="w-[18%]" /></colgroup>
+                            <thead className="bg-white text-xs uppercase tracking-wide text-slate-500"><tr><th className="whitespace-nowrap px-5 py-4 font-semibold">Applicant</th><th className="whitespace-nowrap px-5 py-4 font-semibold">Account email</th><th className="whitespace-nowrap px-5 py-4 font-semibold">Product</th><th className="whitespace-nowrap px-5 py-4 font-semibold">Reference</th><th className="whitespace-nowrap px-5 py-4 font-semibold">Submitted</th><th className="whitespace-nowrap px-5 py-4 font-semibold">Status</th><th className="whitespace-nowrap px-5 py-4 text-right font-semibold">Actions</th></tr></thead>
                             <tbody className="divide-y divide-slate-100">{filteredApplications.map((application) => {
                                 const user = findUserById(application.accountId);
                                 return <tr key={application.referenceNumber}>
-                                    <td className="px-5 py-4 font-semibold text-brand-navy">{application.applicantName}</td>
-                                    <td className="px-5 py-4 text-slate-600">{user?.email ?? 'Account removed'}</td>
-                                    <td className="px-5 py-4 text-slate-600">{application.productName}</td>
-                                    <td className="px-5 py-4 font-medium text-slate-600">{application.referenceNumber}</td>
-                                    <td className="px-5 py-4 text-slate-600">{formatDate(application.submittedAt)}</td>
-                                    <td className="px-5 py-4"><span className={`rounded-full px-3 py-1 text-xs font-semibold ${application.status === 'approved' ? 'bg-emerald-50 text-emerald-700' : application.status === 'submitted' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700'}`}>{statusLabels[application.status]}</span></td>
-                                    <td className="px-5 py-4"><div className="flex justify-end gap-1"><button type="button" onClick={() => setSelectedSubmission(application)} className="rounded-lg px-2.5 py-2 text-xs font-semibold text-slate-600 hover:bg-surface-muted">Details</button>{application.status !== 'approved' && <button type="button" onClick={() => approveSubmission(application)} className="rounded-lg px-2.5 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50">Approve</button>}<button type="button" onClick={() => openEditDialog(application)} className="rounded-lg px-2.5 py-2 text-xs font-semibold text-brand-blue hover:bg-brand-blue-soft">Edit</button><button type="button" onClick={() => handleDelete(application)} className="rounded-lg px-2.5 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50">Delete</button></div></td>
+                                    <td className="whitespace-nowrap px-5 py-4 font-semibold text-brand-navy">{application.applicantName}</td>
+                                    <td className="whitespace-nowrap px-5 py-4 text-slate-600">{user?.email ?? 'Account removed'}</td>
+                                    <td className="whitespace-nowrap px-5 py-4 text-slate-600">{application.productName}</td>
+                                    <td className="whitespace-nowrap px-5 py-4 font-medium text-slate-600">{application.referenceNumber}</td>
+                                    <td className="whitespace-nowrap px-5 py-4 text-slate-600">{formatDate(application.submittedAt)}</td>
+                                    <td className="px-5 py-4"><SubmissionStatusBadge status={application.status} /></td>
+                                    <td className="px-5 py-4"><div className="flex flex-nowrap justify-end gap-1"><button type="button" onClick={() => setSelectedSubmission(application)} className="rounded-lg px-2 py-2 text-xs font-semibold text-slate-600 hover:bg-surface-muted">Details</button>{application.status !== 'approved' && <button type="button" onClick={() => approveSubmission(application)} className="rounded-lg px-2 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50">Approve</button>}<button type="button" onClick={() => openEditDialog(application)} className="rounded-lg px-2 py-2 text-xs font-semibold text-brand-blue hover:bg-brand-blue-soft">Edit</button><button type="button" onClick={() => handleDelete(application)} className="rounded-lg px-2 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50">Delete</button></div></td>
                                 </tr>;
                             })}</tbody>
                         </table></div>
