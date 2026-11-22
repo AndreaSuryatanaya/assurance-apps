@@ -4,11 +4,14 @@ import { submitApplication } from '../../application/submitApplication';
 import { validateApplicationStep, type ApplicationStep, type FieldErrors } from '../../domain/applicationRules';
 import type { InsuranceApplicationDraft } from '../../domain/insuranceApplication';
 import { mockApplicationSubmission } from '../../infrastructure/mockApplicationSubmission';
+import { addApplicationToHistory } from '../../infrastructure/inMemoryApplicationHistory';
 import type { Product } from '../../../products/domain/product';
+import { useDemoSession } from '../../../auth/presentation/hooks/useDemoSession';
 
 const applicationSteps: ApplicationStep[] = ['applicant', 'insuredItem', 'coverage', 'documents', 'review'];
 
 export function useApplicationForm(product: Product) {
+    const { currentAccount } = useDemoSession();
     const [draft, setDraft] = useState<InsuranceApplicationDraft>(() => createApplication());
     const [currentStep, setCurrentStep] = useState(0);
     const [errors, setErrors] = useState<FieldErrors>({});
@@ -67,6 +70,17 @@ export function useApplicationForm(product: Product) {
         setIsSubmitting(true);
         try {
             const result = await submitApplication(draft, product.name, mockApplicationSubmission);
+            if (currentAccount) {
+                addApplicationToHistory({
+                    referenceNumber: result.referenceNumber,
+                    accountId: currentAccount.id,
+                    applicantName: draft.applicant.fullName,
+                    productSlug: product.slug,
+                    productName: product.name,
+                    submittedAt: new Date().toISOString(),
+                    status: result.status,
+                });
+            }
             setReferenceNumber(result.referenceNumber);
         } finally {
             setIsSubmitting(false);

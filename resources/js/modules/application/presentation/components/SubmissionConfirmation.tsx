@@ -18,7 +18,10 @@ export default function SubmissionConfirmation({ referenceNumber, productName }:
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Demo reference number</p>
                 <p className="mt-2 text-lg font-bold tracking-wide text-brand-navy">{referenceNumber}</p>
             </div>
-            <Link href="/" className="button-primary mt-8">Return to products</Link>
+            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+                <Link href="/dashboard" className="button-primary">View my applications</Link>
+                <Link href="/" className="button-secondary">Return to products</Link>
+            </div>
         </div>
     );
 }

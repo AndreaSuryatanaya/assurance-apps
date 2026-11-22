@@ -1,14 +1,25 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import type { ReactNode } from 'react';
+import { signOutOfDemoAccount } from '../modules/auth/application/demoSessionStore';
+import { useDemoSession } from '../modules/auth/presentation/hooks/useDemoSession';
 
 type AppLayoutProps = {
     children: ReactNode;
+    showHeader?: boolean;
+    showFooter?: boolean;
 };
 
-export default function AppLayout({ children }: AppLayoutProps) {
+export default function AppLayout({ children, showHeader = true, showFooter = true }: AppLayoutProps) {
+    const { currentAccount } = useDemoSession();
+
+    function handleSignOut() {
+        signOutOfDemoAccount();
+        router.visit('/');
+    }
+
     return (
         <div className="min-h-screen bg-white text-slate-800">
-            <header className="sticky top-0 z-30 border-b border-slate-100 bg-white/95 backdrop-blur">
+            {showHeader && <header className="sticky top-0 z-30 border-b border-slate-100 bg-white/95 backdrop-blur">
                 <div className="page-container flex h-[76px] items-center justify-between gap-4">
                     <Link href="/" className="flex items-center gap-3" aria-label="Haltev Insurrance home">
                         <img src="/images/brand/haltev-logo.png" alt="" className="h-12 w-12 object-contain" />
@@ -19,12 +30,25 @@ export default function AppLayout({ children }: AppLayoutProps) {
                         <Link href="/#how-it-works" className="transition hover:text-brand-blue">How it works</Link>
                         <Link href="/#about" className="transition hover:text-brand-blue">About us</Link>
                     </nav>
-                    <Link href="/#products" className="button-primary hidden px-5 py-2.5 text-sm sm:inline-flex">Explore products</Link>
-                    <Link href="/#products" className="button-primary px-4 py-2.5 text-xs sm:hidden">Explore</Link>
+                    <div className="flex items-center gap-2">
+                        {currentAccount ? (
+                            <>
+                                <Link href={currentAccount.role === 'admin' ? '/admin/dashboard' : '/dashboard'} className="button-secondary px-3 py-2 text-xs sm:px-4 sm:text-sm">
+                                    {currentAccount.role === 'admin' ? 'Admin dashboard' : 'My applications'}
+                                </Link>
+                                <button type="button" onClick={handleSignOut} className="rounded-xl px-2 py-2 text-xs font-semibold text-slate-500 hover:bg-surface-muted hover:text-brand-navy sm:px-3 sm:text-sm">Sign out</button>
+                            </>
+                        ) : (
+                            <>
+                                <Link href="/login" className="button-secondary px-3 py-2 text-xs sm:px-4 sm:text-sm">Sign in</Link>
+                                <Link href="/#products" className="button-primary px-3 py-2 text-xs sm:px-5 sm:text-sm">Explore products</Link>
+                            </>
+                        )}
+                    </div>
                 </div>
-            </header>
+            </header>}
             <main>{children}</main>
-            <footer className="mt-20 bg-brand-navy text-white">
+            {showFooter && <footer className="mt-20 bg-brand-navy text-white">
                 <div className="page-container grid gap-8 py-12 sm:grid-cols-[1fr_auto] sm:items-center">
                     <div className="flex items-center gap-3">
                         <img src="/images/brand/haltev-logo.png" alt="" className="h-12 w-12 rounded-xl bg-white object-contain p-1" />
@@ -38,7 +62,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 <div className="border-t border-white/10">
                     <div className="page-container py-4 text-xs text-blue-200">© {new Date().getFullYear()} Haltev Insurrance · Demo experience</div>
                 </div>
-            </footer>
+            </footer>}
         </div>
     );
 }

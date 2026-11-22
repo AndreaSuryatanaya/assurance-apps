@@ -5,13 +5,19 @@ import SubmissionConfirmation from '../../modules/application/presentation/compo
 import { useApplicationForm } from '../../modules/application/presentation/hooks/useApplicationForm';
 import { findProductBySlug } from '../../modules/products/infrastructure/productCatalog';
 import type { Product } from '../../modules/products/domain/product';
+import { useRoleGuard } from '../../modules/auth/presentation/hooks/useRoleGuard';
 
 type ApplicationCreateProps = {
     productSlug: string;
 };
 
 export default function ApplicationCreate({ productSlug }: ApplicationCreateProps) {
+    const isAuthorized = useRoleGuard('user');
     const product = findProductBySlug(productSlug);
+
+    if (!isAuthorized) {
+        return <AppLayout><Head title="Sign in required" /><div className="page-container py-24 text-center text-sm text-slate-500">Redirecting to sign in…</div></AppLayout>;
+    }
 
     if (!product) {
         return (
