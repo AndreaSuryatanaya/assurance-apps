@@ -43,7 +43,7 @@ export default function AdminDashboard() {
                         <p className="text-sm text-slate-500">Products represented</p>
                         <p className="mt-2 text-3xl font-bold text-brand-navy">{new Set(applications.map((application) => application.productSlug)).size}</p>
                     </div>
-                    <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-card"><p className="text-sm text-slate-500">Under review</p><p className="mt-2 text-3xl font-bold text-brand-navy">{applications.filter((application) => application.status === 'under_review').length}</p></div>
+                    <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-card"><p className="text-sm text-slate-500">Approved (demo)</p><p className="mt-2 text-3xl font-bold text-brand-navy">{applications.filter((application) => application.status === 'approved').length}</p></div>
                 </div>
 
                 <div className="mt-10">

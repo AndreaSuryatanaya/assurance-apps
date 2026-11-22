@@ -34,7 +34,7 @@ const emptyForm: SubmissionFormValues = {
     productSlug: productCatalog[0].slug, status: 'submitted', coverageOption: '', startDate: '', endDate: '',
     requestedAmount: '', coverageNotes: '', insuredItem: {}, documentNames: '', accuracyConfirmed: false,
 };
-const statusLabels: Record<ApplicationStatus, string> = { submitted: 'Submitted', under_review: 'Under review', needs_information: 'Needs information' };
+const statusLabels: Record<ApplicationStatus, string> = { submitted: 'Submitted', under_review: 'Under review', needs_information: 'Needs information', approved: 'Approved (demo)' };
 
 function formatDate(value: string): string {
     return new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).format(new Date(value));
@@ -173,6 +173,19 @@ export default function AdminSubmissions() {
         }
     }
 
+    function approveSubmission(application: ApplicationHistoryRecord) {
+        if (!window.confirm(`Mark ${application.referenceNumber} as approved in this demo? This does not issue an insurance policy.`)) return;
+
+        updateApplicationInHistory(application.referenceNumber, {
+            accountId: application.accountId,
+            applicantName: application.applicantName,
+            productSlug: application.productSlug,
+            productName: application.productName,
+            status: 'approved',
+            details: application.details,
+        });
+    }
+
     return (
         <AdminLayout>
             <Head title="Submissions · Admin" />
@@ -202,14 +215,14 @@ export default function AdminSubmissions() {
                                     <td className="px-5 py-4 text-slate-600">{application.productName}</td>
                                     <td className="px-5 py-4 font-medium text-slate-600">{application.referenceNumber}</td>
                                     <td className="px-5 py-4 text-slate-600">{formatDate(application.submittedAt)}</td>
-                                    <td className="px-5 py-4"><span className={`rounded-full px-3 py-1 text-xs font-semibold ${application.status === 'submitted' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>{statusLabels[application.status]}</span></td>
-                                    <td className="px-5 py-4"><div className="flex justify-end gap-1"><button type="button" onClick={() => setSelectedSubmission(application)} className="rounded-lg px-2.5 py-2 text-xs font-semibold text-slate-600 hover:bg-surface-muted">Details</button><button type="button" onClick={() => openEditDialog(application)} className="rounded-lg px-2.5 py-2 text-xs font-semibold text-brand-blue hover:bg-brand-blue-soft">Edit</button><button type="button" onClick={() => handleDelete(application)} className="rounded-lg px-2.5 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50">Delete</button></div></td>
+                                    <td className="px-5 py-4"><span className={`rounded-full px-3 py-1 text-xs font-semibold ${application.status === 'approved' ? 'bg-emerald-50 text-emerald-700' : application.status === 'submitted' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700'}`}>{statusLabels[application.status]}</span></td>
+                                    <td className="px-5 py-4"><div className="flex justify-end gap-1"><button type="button" onClick={() => setSelectedSubmission(application)} className="rounded-lg px-2.5 py-2 text-xs font-semibold text-slate-600 hover:bg-surface-muted">Details</button>{application.status !== 'approved' && <button type="button" onClick={() => approveSubmission(application)} className="rounded-lg px-2.5 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50">Approve</button>}<button type="button" onClick={() => openEditDialog(application)} className="rounded-lg px-2.5 py-2 text-xs font-semibold text-brand-blue hover:bg-brand-blue-soft">Edit</button><button type="button" onClick={() => handleDelete(application)} className="rounded-lg px-2.5 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50">Delete</button></div></td>
                                 </tr>;
                             })}</tbody>
                         </table></div>
                     </div>
                 )}
-                <p className="mt-4 text-xs leading-5 text-slate-400">Changes are kept in browser memory for this demo and reset when the page is refreshed. Statuses describe demo handling only, not an insurance decision.</p>
+                <p className="mt-4 text-xs leading-5 text-slate-400">Changes are kept in browser memory for this demo and reset when the page is refreshed. Approved (demo) is a simulated status only; it does not issue a policy or represent a real underwriting decision.</p>
             </section>
 
             {isFormOpen && <AdminDialog title={editingReference ? 'Edit submission' : 'Add submission'} description="Manage submitted applicant and insured item information, requested coverage, and demo handling status." size="wide" onClose={() => setIsFormOpen(false)}>

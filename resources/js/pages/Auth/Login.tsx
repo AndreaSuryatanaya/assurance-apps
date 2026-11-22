@@ -61,7 +61,7 @@ export default function Login() {
                         <div className="mt-8">
                             <p className="text-sm font-semibold uppercase tracking-[0.14em] text-brand-blue">Welcome to Haltev</p>
                             <h2 className="mt-3 text-3xl font-bold tracking-tight text-brand-navy">Sign in</h2>
-                            <p className="mt-3 text-sm leading-6 text-slate-500">Use one of the demo email addresses listed below. All demo accounts share the same password.</p>
+                            <p className="mt-3 text-sm leading-6 text-slate-500">Use the admin or user demo email listed below. Both accounts share the same password.</p>
                         </div>
 
                         <form onSubmit={handleSubmit} className="mt-7 space-y-5">

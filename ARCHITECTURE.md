@@ -185,7 +185,7 @@ This tree shows the intended application structure. Laravel's framework files an
 6. The user dashboard filters application history by the active account ID. The admin dashboard reads all records.
 7. The pending destination is cleared once it is consumed so it cannot reopen after the application flow.
 
-The admin area uses a dedicated responsive sidebar layout and exposes `/admin/dashboard` (overview), `/admin/submissions` (application list with detail, create, update, and delete), and `/admin/users` (user list with create, update, and delete). Static fixtures provide ten mock users and ten mock submissions. Admin changes and live submissions use observable in-memory stores; refresh discards the changes and reinitializes the static fixtures. Submission history stores a snapshot of applicant, insured item, coverage, document names, and accuracy confirmation so the admin detail view can render the submitted information.
+The admin area uses a dedicated responsive sidebar layout and exposes `/admin/dashboard` (overview), `/admin/submissions` (application list with detail, create, update, delete, and simulated approval), and `/admin/users` (user list with create, update, and delete). Static fixtures provide ten mock users and ten mock submissions. The login flow exposes exactly one admin and one user account; the other user fixtures remain admin-managed records. Admin changes and live submissions use observable in-memory stores; refresh discards the changes and reinitializes the static fixtures. Submission history stores a snapshot of applicant, insured item, coverage, document names, and accuracy confirmation so the admin detail view can render the submitted information.
 
 Role guards only control the user experience. Laravel routes are not protected by these client-side mock roles, so this architecture is unsuitable for real accounts or sensitive application data.
 
@@ -224,7 +224,7 @@ Motor Vehicle coverage options are Comprehensive, Total Loss Only (TLO), and Spe
 - Product catalog: static TypeScript data imported by the React product module.
 - Demo session: module-level in-memory state for the active account. A requested application destination travels in the login URL's `next` query parameter.
 - Application history: ten static mock records plus module-level in-memory submissions owned by demo account IDs. Admin CRUD updates the observable collection in memory.
-- Demo users: ten static mock user records managed through an observable in-memory directory. Active user records can sign in with the shared demo password; inactive records cannot.
+- Demo users: ten static mock user records managed through an observable in-memory directory. One active user record is exposed as the user demo account, alongside the separate admin account.
 - Application draft: React in-memory state owned by the application wizard.
 - Submission: simulated in the browser; no Laravel endpoint is called.
 - Persistence: none. Do not use a database, local storage, session storage, or cookies for demo session, application history, or application drafts.

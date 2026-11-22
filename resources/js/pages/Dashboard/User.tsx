@@ -72,7 +72,7 @@ export default function UserDashboard() {
                                                 <td className="px-5 py-4 font-semibold text-brand-navy">{application.productName}</td>
                                                 <td className="px-5 py-4 text-slate-600">{application.referenceNumber}</td>
                                                 <td className="px-5 py-4 text-slate-600">{formatDate(application.submittedAt)}</td>
-                                                <td className="px-5 py-4"><span className={`rounded-full px-3 py-1 text-xs font-semibold ${application.status === 'submitted' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>{formatStatus(application.status)}</span></td>
+                                                <td className="px-5 py-4"><span className={`rounded-full px-3 py-1 text-xs font-semibold ${application.status === 'approved' ? 'bg-emerald-50 text-emerald-700' : application.status === 'submitted' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700'}`}>{formatStatus(application.status)}</span></td>
                                             </tr>
                                         ))}
                                     </tbody>

@@ -110,7 +110,7 @@ export default function AdminUsers() {
                         </div>
                     </div>
                 )}
-                <p className="mt-4 text-xs leading-5 text-slate-400">Active user accounts can sign in with the shared demo password. Changes stay in browser memory and reset when the page is refreshed.</p>
+                <p className="mt-4 text-xs leading-5 text-slate-400">The first active profile is used as the single user demo sign-in alongside the admin account. Changes stay in browser memory and reset when the page is refreshed.</p>
             </section>
 
             {isFormOpen ? (

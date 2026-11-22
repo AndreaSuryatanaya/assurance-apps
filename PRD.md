@@ -28,8 +28,8 @@ Antarmuka aplikasi menggunakan bahasa Inggris. Autentikasi dan data demo disimul
 
 ## 4. Role dan autentikasi demo
 
-- Sediakan login simulasi untuk dua role: `admin` dan `user`.
-- Halaman login menerima email dan password. Aplikasi mencocokkan email dengan akun demo dan menggunakan satu password bersama yang sama untuk semua akun.
+- Sediakan tepat dua akun login demo: satu akun `admin` dan satu akun `user`. Keduanya mewakili dua role tersebut, bukan seluruh data user dummy.
+- Halaman login menerima email dan password. Aplikasi mencocokkan email dengan dua akun demo yang ditampilkan dan menggunakan satu password bersama.
 - Informasi email akun demo dan password bersama ditampilkan di bawah form login agar dapat digunakan saat demo.
 - Pemeriksaan kredensial hanya simulasi di frontend; tidak menggunakan autentikasi sungguhan atau layanan identitas.
 - User yang belum login tetap dapat menjelajahi katalog dan detail produk.
@@ -37,8 +37,8 @@ Antarmuka aplikasi menggunakan bahasa Inggris. Autentikasi dan data demo disimul
 - Setelah login, arahkan admin ke **Admin Dashboard**. User yang masuk dari tombol **Start application** langsung menuju formulir produk yang dipilih; login user tanpa konteks pengajuan menuju **User Application Dashboard**.
 - Halaman yang membutuhkan login mengarahkan guest ke halaman login. User tidak boleh melihat halaman admin; jika user membuka rute admin, arahkan kembali ke User Application Dashboard.
 - User Application Dashboard menampilkan ringkasan dan riwayat pengajuan milik akun demo yang sedang login, serta akses untuk memulai pengajuan baru.
-- Area admin menggunakan navigasi sidebar dengan halaman **Overview**, **Submissions**, dan **Users**. Admin dapat melihat ringkasan, melihat detail pengajuan, serta membuat, membaca, memperbarui, dan menghapus data user maupun submission demo. Perubahan status terbatas pada **Submitted**, **Under review**, dan **Needs information**; keputusan underwriting atau penerbitan polis tidak termasuk cakupan.
-- User dengan status **Active** dapat masuk menggunakan password demo bersama. User yang dinonaktifkan tidak dapat memulai sesi baru. Menghapus user tidak menghapus submission historis yang sudah tercatat.
+- Area admin menggunakan navigasi sidebar dengan halaman **Overview**, **Submissions**, dan **Users**. Admin dapat melihat ringkasan, melihat detail pengajuan, serta membuat, membaca, memperbarui, dan menghapus data user maupun submission demo. Admin dapat mengubah status ke **Submitted**, **Under review**, **Needs information**, atau **Approved (demo)**. Status approved hanya simulasi; keputusan underwriting sungguhan atau penerbitan polis tidak termasuk cakupan.
+- Hanya satu akun user demo ditampilkan untuk login, terpisah dari 10 data user dummy yang dikelola admin. Menghapus user tidak menghapus submission historis yang sudah tercatat.
 - Data pengajuan diberi pemilik berupa ID akun demo agar riwayat user dapat difilter berdasarkan akun yang sedang login.
 
 ## 5. Kategori produk
@@ -109,11 +109,11 @@ Dokumen yang diminta akan disimulasikan di antarmuka; demo tidak perlu mengirim 
 ## 8. Perilaku dan batasan demo
 
 - Login, role, katalog produk, dan pengajuan dikelola sebagai data JSON in-memory di frontend.
-- Sediakan akun demo untuk mensimulasikan role admin dan user. Semua akun memakai password demo yang sama dan informasi akun ditampilkan di bawah form login.
+- Sediakan tepat dua akun demo untuk login: admin dan user. Keduanya memakai password demo yang sama dan informasi akun ditampilkan di bawah form login. Data user tambahan pada halaman admin tidak menambah pilihan akun login.
 - Sediakan 10 data user dummy dan 10 data pengajuan dummy agar area admin memiliki data saat pertama kali dibuka. Admin dapat melakukan CRUD untuk user dan submission serta melihat detail seluruh data formulir submission. Pengajuan baru dan perubahan disimpan in-memory selama sesi aplikasi dan hilang saat halaman dimuat ulang; data contoh statis dimuat kembali.
 - Tidak ada backend, database, penyimpanan permanen, pembayaran, atau integrasi eksternal.
 - Akses user dibatasi ke riwayat milik akun demonya. Admin dapat membaca serta mengelola seluruh pengajuan dan user demo.
-- Setelah submit, tampilkan konfirmasi seperti **Application Submitted** dan nomor referensi demo.
+- Setelah submit, tampilkan konfirmasi seperti **Application Submitted** dan nomor referensi demo. Admin dapat memberi status **Approved (demo)** dari halaman Submissions; status ini bukan persetujuan asuransi nyata.
 - Jangan menampilkan harga sebagai penawaran nyata. Jika angka ilustrasi ditambahkan kemudian, beri label **Illustrative estimate**.
 - Tidak ada klaim bahwa pengajuan telah disetujui atau polis telah diterbitkan.
 
@@ -139,5 +139,6 @@ Dokumen yang diminta akan disimulasikan di antarmuka; demo tidak perlu mengirim 
 - Login sebagai admin membuka Admin Dashboard; login sebagai user dari tombol **Start application** langsung membuka formulir produk terpilih, sedangkan login biasa membuka User Application Dashboard.
 - User hanya melihat riwayat pengajuan akun demonya sendiri.
 - Admin dapat melihat ringkasan, detail pengajuan, dan daftar user melalui sidebar serta mengelola user dan submission lewat operasi CRUD.
+- Admin dapat mengubah status submission menjadi **Approved (demo)** dan status tersebut terlihat pada daftar admin serta riwayat user tanpa menyiratkan polis diterbitkan.
 - Perubahan CRUD tersedia selama aplikasi berjalan dan hilang setelah halaman dimuat ulang; 10 user dan 10 submission contoh dimuat kembali.
 - Tata letak tetap dapat digunakan di desktop dan mobile.

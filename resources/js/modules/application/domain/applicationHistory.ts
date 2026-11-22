@@ -1,6 +1,6 @@
 import type { InsuranceApplicationDraft } from './insuranceApplication';
 
-export type ApplicationStatus = 'submitted' | 'under_review' | 'needs_information';
+export type ApplicationStatus = 'submitted' | 'under_review' | 'needs_information' | 'approved';
 
 export type ApplicationHistoryRecord = {
     referenceNumber: string;
