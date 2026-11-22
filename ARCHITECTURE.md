@@ -44,7 +44,9 @@ resources/
     ├── pages/
     │   ├── Admin/
     │   │   ├── Submissions.tsx
-    │   │   └── Users.tsx
+    │   │   ├── Users.tsx
+    │   │   └── components/
+    │   │       └── AdminDialog.tsx
     │   ├── Products/
     │   │   ├── Index.tsx
     │   │   └── Show.tsx
@@ -63,13 +65,17 @@ resources/
     │   │   ├── application/
     │   │   │   └── demoSessionStore.ts
     │   │   ├── domain/
-    │   │   │   └── demoAccount.ts
+    │   │   │   ├── demoAccount.ts
+    │   │   │   └── demoUserRecord.ts
     │   │   ├── infrastructure/
-    │   │   │   └── demoAccounts.ts
+    │   │   │   ├── demoAccounts.ts
+    │   │   │   ├── inMemoryUserDirectory.ts
+    │   │   │   └── mockUsers.ts
     │   │   └── presentation/
     │   │       └── hooks/
     │   │           ├── useDemoSession.ts
-    │   │           └── useRoleGuard.ts
+    │   │           ├── useRoleGuard.ts
+    │   │           └── useUsers.ts
     │   ├── products/
     │   │   ├── domain/
     │   │   │   └── product.ts
@@ -91,6 +97,7 @@ resources/
     │       │   └── applicationSubmissionGateway.ts
     │       ├── infrastructure/
     │       │   ├── inMemoryApplicationHistory.ts
+    │       │   ├── mockApplicationHistory.ts
     │       │   └── mockApplicationSubmission.ts
     │       └── presentation/
     │           ├── components/
@@ -134,7 +141,7 @@ This tree shows the intended application structure. Laravel's framework files an
 - `modules/products/infrastructure/` contains the static product catalog used by the demo.
 - `modules/products/presentation/` renders the catalog, category selection, and product details.
 - `modules/auth/domain/` defines demo account and role types.
-- `modules/auth/infrastructure/` provides predefined demo accounts.
+- `modules/auth/infrastructure/` provides the fixed admin demo account, mock user fixtures, and an observable in-memory user directory. Active directory records are exposed as user demo sign-in accounts.
 - `modules/auth/application/` owns the in-memory demo session; a selected application destination is carried in the login URL's `next` parameter.
 - `modules/auth/presentation/` renders the account picker and provides role-aware navigation guards. These guards are for the demo flow only and are not security controls.
 - `modules/application/domain/` defines the application shape and pure validation or transition rules.
@@ -178,7 +185,7 @@ This tree shows the intended application structure. Laravel's framework files an
 6. The user dashboard filters application history by the active account ID. The admin dashboard reads all records.
 7. The pending destination is cleared once it is consumed so it cannot reopen after the application flow.
 
-The admin area uses a dedicated responsive sidebar layout and exposes `/admin/dashboard` (overview), `/admin/submissions` (read-only application list), and `/admin/users` (read-only account list). Static fixture adapters provide ten mock users and ten mock submissions. Live submissions are prepended to in-memory history; they clear on refresh while the static sample fixtures are initialized again.
+The admin area uses a dedicated responsive sidebar layout and exposes `/admin/dashboard` (overview), `/admin/submissions` (application list with detail, create, update, and delete), and `/admin/users` (user list with create, update, and delete). Static fixtures provide ten mock users and ten mock submissions. Admin changes and live submissions use observable in-memory stores; refresh discards the changes and reinitializes the static fixtures. Submission history stores a snapshot of applicant, insured item, coverage, document names, and accuracy confirmation so the admin detail view can render the submitted information.
 
 Role guards only control the user experience. Laravel routes are not protected by these client-side mock roles, so this architecture is unsuitable for real accounts or sensitive application data.
 
@@ -216,16 +223,16 @@ Motor Vehicle coverage options are Comprehensive, Total Loss Only (TLO), and Spe
 
 - Product catalog: static TypeScript data imported by the React product module.
 - Demo session: module-level in-memory state for the active account. A requested application destination travels in the login URL's `next` query parameter.
-- Application history: ten static mock records plus module-level in-memory submissions owned by demo account IDs.
-- Demo users: ten static mock account records for the admin users view. Only the two user fixtures with demo credentials can sign in.
+- Application history: ten static mock records plus module-level in-memory submissions owned by demo account IDs. Admin CRUD updates the observable collection in memory.
+- Demo users: ten static mock user records managed through an observable in-memory directory. Active user records can sign in with the shared demo password; inactive records cannot.
 - Application draft: React in-memory state owned by the application wizard.
 - Submission: simulated in the browser; no Laravel endpoint is called.
 - Persistence: none. Do not use a database, local storage, session storage, or cookies for demo session, application history, or application drafts.
-- Refresh behavior: the demo account, live submissions, and in-progress application are cleared. The user returns as a guest; static sample records are loaded again.
+- Refresh behavior: the demo account, admin CRUD changes, live submissions, and in-progress application are cleared. The user returns as a guest; static sample records are loaded again.
 
 ## 9. Explicitly out of scope
 
-- Real authentication, authorization, and user account management.
+- Real authentication, authorization, and durable user account management.
 - Database or durable application storage.
 - Backend API or actual application submission endpoint.
 - Payment, quotation calculation, underwriting, approval, and policy issuance.

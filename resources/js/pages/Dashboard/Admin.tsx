@@ -1,8 +1,8 @@
 import { Head, Link } from '@inertiajs/react';
 import AdminLayout from '../../layouts/AdminLayout';
 import { useApplicationHistory } from '../../modules/application/presentation/hooks/useApplicationHistory';
-import { mockUsers } from '../../modules/auth/infrastructure/mockUsers';
 import { useRoleGuard } from '../../modules/auth/presentation/hooks/useRoleGuard';
+import { useUsers } from '../../modules/auth/presentation/hooks/useUsers';
 
 function formatDate(value: string): string {
     return new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).format(new Date(value));
@@ -11,6 +11,7 @@ function formatDate(value: string): string {
 export default function AdminDashboard() {
     const isAuthorized = useRoleGuard('admin');
     const applications = useApplicationHistory();
+    const users = useUsers();
 
     if (!isAuthorized) {
         return <div className="py-24 text-center text-sm text-slate-500">Redirecting to your account…</div>;
@@ -36,13 +37,13 @@ export default function AdminDashboard() {
                     </div>
                     <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-card">
                         <p className="text-sm text-slate-500">Demo users</p>
-                        <p className="mt-2 text-3xl font-bold text-brand-navy">{mockUsers.length}</p>
+                        <p className="mt-2 text-3xl font-bold text-brand-navy">{users.length}</p>
                     </div>
                     <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-card">
                         <p className="text-sm text-slate-500">Products represented</p>
                         <p className="mt-2 text-3xl font-bold text-brand-navy">{new Set(applications.map((application) => application.productSlug)).size}</p>
                     </div>
-                    <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-card"><p className="text-sm text-slate-500">Application status</p><p className="mt-2 text-3xl font-bold text-brand-navy">Submitted</p></div>
+                    <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-card"><p className="text-sm text-slate-500">Under review</p><p className="mt-2 text-3xl font-bold text-brand-navy">{applications.filter((application) => application.status === 'under_review').length}</p></div>
                 </div>
 
                 <div className="mt-10">

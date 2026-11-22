@@ -79,6 +79,7 @@ export function useApplicationForm(product: Product) {
                     productName: product.name,
                     submittedAt: new Date().toISOString(),
                     status: result.status,
+                    details: structuredClone(draft),
                 });
             }
             setReferenceNumber(result.referenceNumber);

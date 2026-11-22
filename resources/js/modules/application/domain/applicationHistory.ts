@@ -1,3 +1,7 @@
+import type { InsuranceApplicationDraft } from './insuranceApplication';
+
+export type ApplicationStatus = 'submitted' | 'under_review' | 'needs_information';
+
 export type ApplicationHistoryRecord = {
     referenceNumber: string;
     accountId: string;
@@ -5,5 +9,6 @@ export type ApplicationHistoryRecord = {
     productSlug: string;
     productName: string;
     submittedAt: string;
-    status: 'submitted';
+    status: ApplicationStatus;
+    details?: InsuranceApplicationDraft;
 };

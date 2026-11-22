@@ -2,12 +2,13 @@ import { Head, Link, router } from '@inertiajs/react';
 import { useEffect, useState, type FormEvent } from 'react';
 import AppLayout from '../../layouts/AppLayout';
 import { signInToDemoAccount } from '../../modules/auth/application/demoSessionStore';
-import { demoAccounts, findDemoAccountByEmail, sharedDemoPassword } from '../../modules/auth/infrastructure/demoAccounts';
+import { findDemoAccountByEmail, getDemoAccounts, sharedDemoPassword } from '../../modules/auth/infrastructure/demoAccounts';
 import { useDemoSession } from '../../modules/auth/presentation/hooks/useDemoSession';
 import { getDashboardPath, getSafeApplicationPath } from '../../modules/auth/presentation/hooks/useRoleGuard';
 
 export default function Login() {
     const { currentAccount } = useDemoSession();
+    const demoAccounts = getDemoAccounts();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');

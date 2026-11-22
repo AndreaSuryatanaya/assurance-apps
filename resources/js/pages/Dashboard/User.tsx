@@ -8,6 +8,10 @@ function formatDate(value: string): string {
     return new Intl.DateTimeFormat('en', { dateStyle: 'medium' }).format(new Date(value));
 }
 
+function formatStatus(value: string): string {
+    return value.split('_').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
+
 export default function UserDashboard() {
     const isAuthorized = useRoleGuard('user');
     const { currentAccount } = useDemoSession();
@@ -68,7 +72,7 @@ export default function UserDashboard() {
                                                 <td className="px-5 py-4 font-semibold text-brand-navy">{application.productName}</td>
                                                 <td className="px-5 py-4 text-slate-600">{application.referenceNumber}</td>
                                                 <td className="px-5 py-4 text-slate-600">{formatDate(application.submittedAt)}</td>
-                                                <td className="px-5 py-4"><span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold capitalize text-emerald-700">{application.status}</span></td>
+                                                <td className="px-5 py-4"><span className={`rounded-full px-3 py-1 text-xs font-semibold ${application.status === 'submitted' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>{formatStatus(application.status)}</span></td>
                                             </tr>
                                         ))}
                                     </tbody>

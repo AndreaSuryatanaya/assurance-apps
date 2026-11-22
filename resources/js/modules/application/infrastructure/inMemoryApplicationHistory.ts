@@ -17,3 +17,15 @@ export function addApplicationToHistory(application: ApplicationHistoryRecord): 
     applicationHistory = [application, ...applicationHistory];
     listeners.forEach((listener) => listener());
 }
+
+export function updateApplicationInHistory(referenceNumber: string, updates: Omit<ApplicationHistoryRecord, 'referenceNumber' | 'submittedAt'>): void {
+    applicationHistory = applicationHistory.map((application) => application.referenceNumber === referenceNumber
+        ? { ...application, ...updates }
+        : application);
+    listeners.forEach((listener) => listener());
+}
+
+export function deleteApplicationFromHistory(referenceNumber: string): void {
+    applicationHistory = applicationHistory.filter((application) => application.referenceNumber !== referenceNumber);
+    listeners.forEach((listener) => listener());
+}
